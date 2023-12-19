@@ -11,7 +11,7 @@ ramulator
 # do not add all cputraces, only pickup some traces to git repo
 cputraces/*
 #!cputraces/429.mcf
-!cputraces/462.libquantum
+#!cputraces/462.libquantum
 !cputraces/433.milc
 # in gitignore, it must use this pair to "ignore the whole directory expect a few files"
 # ref: https://stackoverflow.com/questions/987142/make-gitignore-ignore-everything-except-a-few-files
