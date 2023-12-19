@@ -1,3 +1,2 @@
 cputraces/429.mcf filter=lfs diff=lfs merge=lfs -text
-cputraces/462.libquantum filter=lfs diff=lfs merge=lfs -text
 cputraces/433.milc filter=lfs diff=lfs merge=lfs -text
