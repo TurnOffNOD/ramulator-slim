@@ -1,7 +1,6 @@
 #include "Processor.h"
 #include "Config.h"
 #include "Controller.h"
-#include "SpeedyController.h"
 #include "Memory.h"
 #include "DRAM.h"
 #include "Statistics.h"

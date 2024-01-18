@@ -5,7 +5,6 @@
 #include "DRAM.h"
 #include "Request.h"
 #include "Controller.h"
-#include "SpeedyController.h"
 #include "Statistics.h"
 //#include "GDDR5.h"
 #include "HBM.h"
