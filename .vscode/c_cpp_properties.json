@@ -3,7 +3,9 @@
         {
             "name": "Linux",
             "includePath": [
-                "${workspaceFolder}/**"
+                "${workspaceFolder}/**",
+                "${workspaceFolder}/../dramPower-my/src/DRAMPower",
+                "${workspaceFolder}/../dramPower-my/lib/nlohmann_json/**"
             ],
             "defines": [],
             "compilerPath": "/usr/bin/clang++",

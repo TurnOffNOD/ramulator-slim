@@ -19,6 +19,11 @@
 #include "WideIO2.h"
 #include "HBM.h"
 
+/*DRAMPower simulation*/
+#include "DRAMPower/command/Command.h"
+#include "DRAMPower/standards/ddr4/DDR4.h"
+#include "DRAMPower/util/json.h"
+
 #define DEBUGcout cerr <<"DEBUG: " <<__FILE__<<",at" << __LINE__<< ": "
 
 using namespace std;
@@ -226,6 +231,20 @@ configs.debug();
   //DEBUGcout <<"before " << standard <<" start_run in main()" <<endl;
       start_run(configs, ddr3, files);
     } else if (standard == "DDR4") {
+
+      /*DRAMPower DDR4 config*/
+      ifstream drampower_config_fsteam("./configs/ddr4-from_dramPower.json");
+      if (!drampower_config_fsteam.is_open()) {
+        cerr <<"Could not open file" << endl;
+        exit(1);
+      }
+      nlohmann::json drampower_config_data = nlohmann::json::parse(drampower_config_fsteam);
+
+      DRAMPower::MemSpecDDR4 drampower_ddr4(drampower_config_data["memspec"]);
+      DRAMPower::DDR4 drampower_ddr(drampower_ddr4);
+
+
+
       DDR4* ddr4 = new DDR4(configs["org"], configs["speed"]);
       start_run(configs, ddr4, files);
     } else if (standard == "HBM") {

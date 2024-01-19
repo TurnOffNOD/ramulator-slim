@@ -20,6 +20,9 @@
 //#include "SALP.h"
 //#include "TLDRAM.h"
 
+/*DRAMPower simulation, must have -I flag when build*/
+#include "DRAMPower/command/Command.h"
+
 using namespace std;
 
 #define DEBUGcout cerr <<"DEBUG: " <<__FILE__<<",at" << __LINE__<< " - "
@@ -33,6 +36,22 @@ template <typename T>
 class Controller
 {
 protected:
+    /*DRAMPower related map*/
+    map<string, DRAMPower::CmdType> drampower_cmdtype_map = {
+        {"ACT",     DRAMPower::CmdType::ACT},
+        {"PRE",     DRAMPower::CmdType::PRE},
+        {"PREA",    DRAMPower::CmdType::PREA},
+        {"RD",      DRAMPower::CmdType::RD},
+        {"WR",      DRAMPower::CmdType::WR},
+        {"RDA",     DRAMPower::CmdType::RDA},
+        {"WRA",     DRAMPower::CmdType::WRA},
+        {"REF",     DRAMPower::CmdType::REFA},
+        {"PDE",     DRAMPower::CmdType::PDEA},
+        {"PDX",     DRAMPower::CmdType::PDXA},
+        {"SRE",     DRAMPower::CmdType::SREFEN},
+        {"SRX",     DRAMPower::CmdType::SREFEX}
+        };
+
     // For counting bandwidth
     ScalarStat read_transaction_bytes;
     ScalarStat write_transaction_bytes;
@@ -67,7 +86,11 @@ protected:
     VectorStat record_write_conflicts;
 #endif
 
+
 public:
+    /*for DRAMPower simulation*/
+    vector<DRAMPower::Command> drampower_cmdlist;
+
     /* Member Variables */
     long clk = 0;
     DRAM<T>* channel;
@@ -628,11 +651,14 @@ private:
             if (cmd_name == "PREA" || cmd_name == "REF")
                 file<<endl;
             else{
-                int bank_id = addr_vec[int(T::Level::Bank)];
+                unsigned int bank_id = addr_vec[int(T::Level::Bank)];
                 if (channel->spec->standard_name == "DDR4" || channel->spec->standard_name == "GDDR5")
                     bank_id += addr_vec[int(T::Level::Bank) - 1] * channel->spec->org_entry.count[int(T::Level::Bank)];
                 file<<','<<bank_id<<endl;
+                //drampower_cmdlist.push_back({ clk, drampower_cmdtype_map[cmd_name], {bank_id, 0, 0} });
+                drampower_cmdlist.push_back({ (unsigned long)clk, drampower_cmdtype_map[cmd_name], {bank_id, 0, 0} });
             }
+
         }
         if (print_cmd_trace){
             printf("%5s %10ld:", channel->spec->command_name[int(cmd)].c_str(), clk);
